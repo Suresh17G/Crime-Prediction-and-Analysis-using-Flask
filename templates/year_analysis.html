@@ -1,0 +1,128 @@
+<html>
+<head>
+  <title>Year Wise Analysis</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='css/pred_style.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/menu_style.css')}}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body style="background-color: white;" >
+	<div class="navbar">
+		<a href="home.html">Home</a>
+		<a href="prediction.html">Prediction</a>
+		<div class="dropdown">
+		  <button style=" background-color: red;color: black;"  class="dropbtn">Analysis 
+			<i class="fa fa-caret-down"></i>
+		  </button>
+		  <div class="dropdown-content">
+			<a href="analysis.html">Crime analysis</a>
+			<a href="city_analysis.html">Citywise</a>
+			<a style=" background-color: red;color: black;"  href="year_analysis.html">Yearwise</a>
+		  </div>
+		</div> 
+</div>
+	  <br>
+    <center><h1 style="padding-top: 50px;">Crime Analysis based on a fixed range of years</h1>
+	</center><br>
+   
+    <style>
+    .divbox {
+  	  width: 300px;
+	  border: 15px solid purple;
+	  padding: 50px;
+	  margin: 20px;
+	  text-align: center;
+	  margin-left: auto;
+	  margin-right: auto;
+	 
+    }
+	.divcontent{
+		display: inline;
+		margin-left: 20px;
+	  margin-right: auto;
+	 
+	}
+    body{
+	color: black;
+    }
+	.graph-container {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.graph {
+		flex-basis: 50%;
+	}
+    </style>
+	<div class="mainDiv">
+		<div class="cardStyle">
+	  
+			<form action="/analyse" method="POST">
+			
+		   <div class="inputDiv">
+			<label  for="state">State</label><br><br>
+		  <select name="state" id="state" onchange="loadoptions(dist_array)">
+			 
+		  </select><br>
+		  <label for="fromYears">From Year</label><br>
+    	<select id="fromYears"></select><br>
+
+		<label for="toYears">To Year</label><br>
+    	<select id="toYears"></select>
+		  
+		  <script type="text/javascript">
+			var state_array=["ANDHRA PRADESH","ARUNACHAL PRADESH","ASSAM","BIHAR","CHHATTISGARH","GOA","GUJARAT","HARYANA","HIMACHAL PRADESH","JAMMU & KASHMIR","JHARKHAND","KARNATAKA",
+			"KERALA","MADHYA PRADESH","MAHARASHTRA","MANIPUR","MEGHALAYA","MIZORAM","NAGALAND","ODISHA","PUNJAB","RAJASTHAN","SIKKIM","TAMIL NADU","TRIPURA","UTTAR PRADESH","UTTARAKHAND","WEST BENGAL"];
+		
+			  window.onload = function () {
+				var fromYears = document.getElementById("fromYears");
+				var toYears = document.getElementById("toYears");
+				var currentYear = (new Date()).getFullYear();
+				for (var i = 2001; i <= currentYear+5; i++) {
+					var option = document.createElement("OPTION");
+					option.innerHTML = i;
+					option.value = i;
+					var option1 = document.createElement("OPTION");
+					option1.innerHTML = i;
+					option1.value = i;
+					fromYears.appendChild(option);
+					toYears.appendChild(option1);
+				}
+				  var state = document.getElementById("state");
+				  for (var i = 0; i <state_array.length; i++) {
+					var option = document.createElement("OPTION");
+					option.innerHTML = state_array[i];
+					option.value =state_array[i];
+					state.appendChild(option);
+				}
+	
+			  };
+			</script>
+			</div>
+			<div>
+				<button type="submit" id="submitButton" class="submitButton"> Analyse   </button>
+			</div>
+		</form>
+		  </div>
+		
+		</div>
+	{% if graph1 %}
+	<h1 id="head">Selected:{{a}}, {{b}} and {{c}}</h1>
+	<div class="graph-container">
+		<div id="graph1" class="graph"></div>
+		<div id="graph2" class="graph"></div>
+	</div>
+	{%endif %}
+	
+	
+</body>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'>
+</script>
+<script type='text/javascript'>
+  var graphs1 = {{graph1 | safe}};
+  var graphs2 = {{graph2 | safe}};
+  Plotly.newPlot('graph1',graphs1,{});
+  Plotly.newPlot('graph2',graphs2,{});
+</script>
+</html>
+   

@@ -1,0 +1,169 @@
+<html>
+<head>
+  <title>Crime Analysis</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='css/menu_style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/pred_style.css')}}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body style="background-color: white;" >
+	<div class="navbar">
+		<a href="home.html">Home</a>
+		<a href="prediction.html">Prediction</a>
+		<div class="dropdown">
+		  <button style=" background-color: red;color: black;"  class="dropbtn">Analysis 
+			<i class="fa fa-caret-down"></i>
+		  </button>
+		  <div class="dropdown-content">
+			<a style=" background-color: red;color: black;" href="analysis.html">Crime analysis</a>
+			<a href="city_analysis.html">Citywise</a>
+		  </div>
+		</div> 
+	  </div>
+	  <br>
+    <center><h1 style="padding-top: 50px;">Crime Analysis for a fixed City and Year</h1></center>
+      <br>
+    <style>
+    .divbox {
+  	  width: 300px;
+	  border: 15px solid purple;
+	  padding: 50px;
+	  margin: 20px;
+	  text-align: center;
+	  margin-left: auto;
+	  margin-right: auto;
+	  
+    }
+    body{
+	color: black;
+
+    }
+	.graph-container {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.graph {
+		flex-basis: 50%;
+	}
+    </style>
+    <div class="mainDiv">
+		<div class="cardStyle">
+	  
+			<form action="/analyse" method="POST">
+			
+		   <div class="inputDiv">
+			<label  for="state">State</label><br><br>
+		  <select name="state" id="state" onchange="loadoptions(dist_array)">
+			 
+		  </select><br>
+		  
+		  <label for="districts">District</label><br><br>
+		  <select name="districts" id="districts">
+		  
+		  </select>
+		  
+		  <br><br><label for="ddlYears">Year</label><br><br>
+		  <select name="year" id="ddlYears"></select><br>
+	
+		  <script type="text/javascript">
+			var state_array=["ANDHRA PRADESH","ARUNACHAL PRADESH","ASSAM","BIHAR","CHHATTISGARH","GOA","GUJARAT","HARYANA","HIMACHAL PRADESH","JAMMU & KASHMIR","JHARKHAND","KARNATAKA",
+			"KERALA","MADHYA PRADESH","MAHARASHTRA","MANIPUR","MEGHALAYA","MIZORAM","NAGALAND","ODISHA","PUNJAB","RAJASTHAN","SIKKIM","TAMIL NADU","TRIPURA","UTTAR PRADESH","UTTARAKHAND","WEST BENGAL"];
+			var dist_array=[
+				["ADILABAD","ANANTAPUR","CHITTOOR","CUDDAPAH","EAST GODAVARI","GUNTAKAL RLY.","GUNTUR","HYDERABAD CITY",
+				"KARIMNAGAR","KHAMMAM","KRISHNA","KURNOOL","MAHABOOBNAGAR","MEDAK","NALGONDA","NELLORE","NIZAMABAD","PRAKASHAM","RANGA REDDY","SECUNDERABAD RLY.",
+				"SRIKAKULAM","VIJAYAWADA","VIJAYAWADA RLY.","VISAKHA RURAL","VISAKHAPATNAM","VIZIANAGARAM","WARANGAL","WEST GODAVARI"],
+				["CHANGLANG","DIBANG VALLEY","KAMENG EAST","KAMENG WEST","LOHIT","PAPUM PARE","SIANG EAST","SIANG UPPER","SIANG WEST","SUBANSIRI LOWER","SUBANSIRI UPPER","TAWANG","TIRAP"],			
+				["BARPETA","BONGAIGAON","C.I.D.","CACHAR","DARRANG","DHEMAJI","DHUBRI","DIBRUGARH","G.R.P.","GOALPARA","GOLAGHAT","GUWAHATI CITY","HAILAKANDI","JORHAT","KAMRUP","KARBI ANGLONG","KARIMGANJ",
+				"KOKRAJHAR","LAKHIMPUR","MORIGAON","N.C.HILLS","NAGAON","NALBARI","R.P.O.","SIBSAGAR","SONITPUR","TINSUKIA"],
+				["ARARIA","ARWAL","AURANGABAD","BAGAHA","BANKA","BEGUSARAI","BETTIAH","BHABHUA","BHAGALPUR","BHOJPUR","BUXAR","DARBHANGA","GAYA","GOPALGANJ","JAMALPUR RLY.","JAMUI","JEHANABAD","KATIHAR","KATIHAR RLY.","KHAGARIA","KISHANGANJ","LAKHISARAI",
+				"MADHEPURA","MADHUBANI","MOTIHARI","MUNGER","MUZAFFARPUR","MUZAFFARPUR RLY.","NALANDA","NAUGACHIA","NAWADAH","PATNA","PATNA RLY.","PURNEA","ROHTAS","SAHARSA","SAMASTIPUR","SARAN","SHEIKHPURA","SHEOHAR","SITAMARHI","SIWAN","SUPAUL","VAISHALI"],
+				["BALRAMPUR","BILASPUR","BIZAPUR","DANTEWARA","DHAMTARI","DURG","GRP RAIPUR","JAGDALPUR","JANJGIR","JASHPUR","KANKER","KORBA","KORIYA","MAHASAMUND","RAIGARH","RAIPUR","RAJNANDGAON","SARGUJA"],
+				["NORTH GOA","SOUTH GOA"],
+				["AHMEDABAD COMMR.","AHMEDABAD RURAL","AHWA-DANG","AMRELI","ANAND","BHARUCH","BHAVNAGAR","DAHOD","GANDHINAGAR","HIMATNAGAR","JAMNAGAR","JUNAGADH","KHEDA NORTH","KUTCH","MEHSANA","NARMADA","NAVSARI","PALANPUR","PANCHMAHAL","PATAN","PORBANDAR",
+				"RAJKOT COMMR.","RAJKOT RURAL","SURAT COMMR.","SURAT RURAL","SURENDRANAGAR","VADODARA COMMR.","VADODARA RURAL","VALSAD","W.RLY"],
+				["AMBALA","BHIWANI","FARIDABAD","FATEHABAD","GRP","GURGAON","HISSAR","JHAJJAR","JIND","KAITHAL","KARNAL","KURUKSHETRA","MAHENDRAGARH","PANCHKULA","PANIPAT","REWARI","ROHTAK","SIRSA","SONIPAT","YAMUNANAGAR"],
+				["BILASPUR","CHAMBA","G.R.P.","HAMIRPUR","KANGRA","KINNAUR","KULLU","LAHAUL-SPITI","MANDI","SHIMLA","SIRMAUR","SOLAN","UNA"],
+				["ANANTNAG","AWANTIPORA","BARAMULLA","BORDER","BUDGAM","CRIME JAMMU","CRIME SRINAGAR","DODA","GANDERBAL","JAMMU","KARGIL","KATHUA","KULGAM","KUPWARA","LEH","POONCH","PULWAMA","RAILWAYS","RAJOURI","RAMBAN","REASI","SRINAGAR","UDHAMPUR"],
+				["BOKARO","CHAIBASA","CHATRA","DEOGHAR","DHANBAD","DHANBAD RLY.","DUMKA","GARHWA","GIRIDIH","GODDA","GUMLA","HAZARIBAGH","JAMSHEDPUR","JAMSHEDPUR RLY.","JAMTARA","KODERMA","LATEHAR","LOHARDAGGA","PAKUR","PALAMU","RANCHI","SAHEBGANJ","SARAIKELA","SIMDEGA"],
+				["BAGALKOT","BANGALORE COMMR.","BANGALORE RURAL","BELGAUM","BELLARY","BIDAR","BIJAPUR","CHAMARAJNAGAR","CHICKMAGALUR","CHITRADURGA","DAKSHIN KANNADA","DAVANAGERE","DHARWAD COMMR.","DHARWAD RURAL","GADAG",
+				"GULBARGA","HASSAN","HAVERI","K.G.F.","KODAGU","KOLAR","KOPPAL","MANDYA","MYSORE COMMR.","MYSORE RURAL","RAICHUR","RAILWAYS","SHIMOGA","TUMKUR","UDUPI","UTTAR KANNADA"],
+				["ALAPUZHA","CBCID","ERNAKULAM","IDUKKI","KANNUR","KASARGOD","KOLLAM","KOTTAYAM","KOZHIKODE","MALAPPURAM","PALAKKAD","PATHANAMTHITTA","RAILWAYS","THRISSUR","TRIVANDRUM","WAYANADU"],
+				["BALAGHAT","BARWANI","BETUL","BHIND","BHOPAL","BHOPAL RLY.","CHHATARPUR","CHHINDWARA","DAMOH","DATIYA","DEWAS","DHAR","DINDORI","GUNA","GWALIOR","HARDA","HOSHANGABAD","INDORE","INDORE RLY.","JABALPUR","JABALPUR RLY.","JHABUA","KATNI","KHANDWA",
+				"KHARGON","MANDLA","MANDSAUR","MORENA","NARSINGHPUR","NEEMUCH","PANNA","RAISEN","RAJGARH","RATLAM","REWA","SAGAR","SATNA","SEONI","SHAHDOL","SHAJAPUR","SHEOPUR","SHIVPURI","SIDHI","SIHORE","TIKAMGARH","UJJAIN","UMARIYA","VIDISHA"],
+				["AHMEDNAGAR","AKOLA","AMRAVATI COMMR.","AMRAVATI RURAL","AURANGABAD COMMR.","AURANGABAD RURAL","BEED","BHANDARA","BULDHANA","CHANDRAPUR","DHULE","GADCHIROLI","GONDIA","HINGOLI","JALGAON","JALNA","KOLHAPUR","LATUR","MUMBAI","MUMBAI RLY.","NAGPUR COMMR.","NAGPUR RLY.","NAGPUR RURAL","NANDED","NANDURBAR","NASIK COMMR.","NASIK RURAL","NAVI MUMBAI","OSMANABAD","PARBHANI","PUNE COMMR.","PUNE RLY.","PUNE RURAL","RAIGAD","RATNAGIRI","SANGLI","SATARA","SINDHUDURG","SOLAPUR COMMR.","SOLAPUR RURAL","THANE COMMR.","THANE RURAL","WARDHA","WASHIM","YAVATMAL"],
+				["BISHNUPUR","CHANDEL","CHURACHANDPUR","IMPHAL(EAST)","IMPHAL(WEST)","SENAPATI","TAMENGLONG","THOUBAL","UKHRUL"],
+				["GARO HILLS SOUTH","GARO HILLS WEST","JAINTIA HILLS","KHASI HILLS EAST","KHASI HILLS WEST","RI-BHOI"],
+				["AIZAWL","CHAMPHAI","KOLASIB","LAWNGTLAI","LUNGLEI","MAMIT","SAIHA","SERCHHIP"],
+				["DIMAPUR","KIPHIRE","KOHIMA","MOKOKCHUNG","MON","PEREN","PHEK","TUENSANG","WOKHA","ZUNHEBOTO"],
+				["ANGUL","BALASORE","BARAGARH","BERHAMPUR","BHADRAK","BOLANGIR","BOUDH","CUTTACK","DEOGARH","DHENKANAL","GAJAPATI","GANJAM","JAGATSINGHPUR","JAJPUR","JHARSUGUDA","KALAHANDI","KANDHAMAL","KENDRAPARA","KEONJHAR","KHURDA","KORAPUT","MALKANGIR","MAYURBHANJ","NAYAGARH",
+				"NOWRANGPUR","NUAPADA","PURI","RAYAGADA","ROURKELA","SAMBALPUR","SONEPUR","SRP(CUTTACK)","SRP(ROURKELA)","SUNDARGARH"],
+				["AMRITSAR","BARNALA","BATALA","BHATINDA","FARIDKOT","FATEHGARH SAHIB","FEROZEPUR","G.R.P","GURDASPUR","HOSHIARPUR","JAGRAON","JALANDHAR","KAPURTHALA","KHANNA","LUDHIANA","MAJITHA","MANSA","MOGA","MUKTSAR","NAWAN SHAHR","PATIALA","ROPAR","SANGRUR","TARN TARAN"],
+				["AJMER","ALWAR","BANSWARA","BARAN","BARMER","BHARATPUR","BHILWARA","BIKANER","BUNDI","CHITTORGARH","CHURU","DAUSA","DHOLPUR","DUNGARPUR","G.R.P.","GANGANAGAR","HANUMANGARH","JAIPUR","JAISALMER","JALORE","JHALAWAR","JHUNJHUNU","JODHPUR","KARAULI","KOTA","NAGAUR","PALI","RAJSAMAND","SAWAI MADHOPUR","SIKAR","SIROHI","TONK","UDAIPUR"],
+				["EAST","NORTH","SOUTH","WEST"],
+				["ARIYALUR","CHENGAI","CHENNAI","CHENNAI RLY.","COIMBATORE RURAL","COIMBATORE URBAN","CUDDALORE","DHARMAPURI","DINDIGUL","ERODE","KANCHIPURAM","KANYAKUMARI","KARUR","MADURAI RURAL","MADURAI URBAN","NAGAPATTINAM","NAMAKKAL","NILGIRIS","PERAMBALUR","PUDUKOTTAI","RAMNATHAPURAM","SALEM RURAL","SALEM URBAN","SIVAGANGAI","THANJAVUR","THENI","THIRUNELVELI RURAL","THIRUNELVELI URBAN","THIRUVALLUR","THIRUVANNAMALAI","THIRUVARUR","THOOTHUGUDI","TRICHY RLY.","TRICHY RURAL","TRICHY URBAN","VELLORE","VILLUPURAM","VIRUDHUNAGAR"],
+				["DHALAI","NORTH","SOUTH","WEST"],
+				["AGRA","ALIGARH","ALLAHABAD","AMBEDKAR NAGAR","AURAIYA","AZAMGARH","BADAUN","BAGHPAT","BAHRAICH","BALLIA","BALRAMPUR","BANDA","BARABANKI","BAREILLY","BASTI","BIJNOR","BULANDSHAHAR","CHANDOLI","CHITRAKOOT DHAM","DEORIA","ETAH","ETAWAH","FAIZABAD","FATEHGARH","FATEHPUR",
+				"FIROZABAD","G.R.P.","GAUTAMBUDH NAGAR","GHAZIABAD","GHAZIPUR","GONDA","GORAKHPUR","HAMIRPUR","HARDOI","HATHRAS","J.P.NAGAR","JALAUN","JAUNPUR","JHANSI","KANNAUJ","KANPUR DEHAT","KANPUR NAGAR","KAUSHAMBI","KHIRI","KUSHI NAGAR","LALITPUR","LUCKNOW","MAHARAJGANJ","MAHOBA","MAINPURI","MATHURA","MAU","MEERUT","MIRZAPUR",
+				"MORADABAD","MUZAFFARNAGAR","PILIBHIT","PRATAPGARH","RAIBAREILLY","RAMPUR","SAHARANPUR","SANT KABIRNAGAR","SHAHJAHANPUR","SHRAWASTI","SIDHARTHNAGAR","SITAPUR","SONBHADRA","ST.RAVIDASNAGAR","SULTANPUR","UNNAO","VARANASI"],
+				["ALMORA","BAGESHWAR","CHAMOLI","CHAMPAWAT","DEHRADUN","HARIDWAR","NAINITAL","PAURI GARHWAL","PITHORAGARH","RUDRA PRAYAG","TEHRI GARHWAL","UDHAMSINGH NAGAR","UTTARKASHI"],
+				["24 PARGANAS NORTH","24 PARGANAS SOUTH","ASANSOL","BANKURA","BIRBHUM","BURDWAN","COOCHBEHAR","DAKSHIN DINAJPUR","DARJEELING","HOOGHLY","HOWRAH","HOWRAH CITY","HOWRAH G.R.P.","JALPAIGURI","KOLKATA","MALDA","MIDNAPUR","MURSHIDABAD","NADIA","PURULIA","SEALDAH G.R.P.","SILIGURI G.R.P.","UTTAR DINAJPUR"]
+				];
+			  window.onload = function () {
+				  var ddlYears = document.getElementById("ddlYears");
+				  var state = document.getElementById("state");
+				  var currentYear = (new Date()).getFullYear();
+				  for (var i = 2001; i <= currentYear+5; i++) {
+					  var option = document.createElement("OPTION");
+					  option.innerHTML = i;
+					  option.value = i;
+					  ddlYears.appendChild(option);
+				  }
+				  for (var i = 0; i <state_array.length; i++) {
+					var option = document.createElement("OPTION");
+					option.innerHTML = state_array[i];
+					option.value =state_array[i];
+					state.appendChild(option);
+				}
+	
+			  };
+			  function loadoptions(dist_array){
+				var state = document.getElementById("state").value;
+				var districts= document.getElementById("districts");
+				districts.innerHTML="";
+				for (var i = 0; i <state_array.length; i++) {
+					if(state==state_array[i]){
+						for (var j = 0; j <dist_array[i].length; j++) {
+							districts.innerHTML += '<option value="' + dist_array[i][j] + '">' + dist_array[i][j] + '</option>';
+							}
+					}
+					}
+			  }
+			  </script>
+			</div>
+			<div>
+				<button type="submit" id="submitButton" class="submitButton"> Analyse   </button>
+			</div>
+		</form>
+		  </div>
+		
+		</div>
+	{% if graph1 %}
+	<h1 id="head">Selected:{{a}}, {{b}} and {{c}}</h1>
+	<div class="graph-container">
+		<div id="graph1" class="graph"></div>
+		<div id="graph2" class="graph"></div>
+	</div>
+	{%endif %}
+	
+	
+</body>
+<script src='https://cdn.plot.ly/plotly-latest.min.js'>
+</script>
+<script type='text/javascript'>
+  var graphs1 = {{graph1 | safe}};
+  var graphs2 = {{graph2 | safe}};
+  Plotly.newPlot('graph1',graphs1,{});
+  Plotly.newPlot('graph2',graphs2,{});
+</script>
+</html>

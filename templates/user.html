@@ -1,0 +1,45 @@
+<html>
+ <head>
+	<title>User Details</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='css/user_style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/menu_style.css')}}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ </head>
+<body>
+  <div class="navbar">
+		<a href="home.html">Home</a>
+		<a href="prediction.html">Prediction</a>
+		<div class="dropdown">
+		  <button class="dropbtn">Analysis 
+			<i class="fa fa-caret-down"></i>
+		  </button>
+		  <div class="dropdown-content">
+			<a href="analysis.html">Crime analysis</a>
+			<a href="city_analysis.html">Citywise</a>
+			<a href="year_analysis.html">Yearwise</a>
+		  </div>
+		</div> 
+		<a href="registration.html">Sign up</a>
+		<a style=" background-color: red;color: black;" href="user.html">Profile</a>
+	  </div>
+ <div class="mainDiv">
+  <div class="cardStyle">
+
+      <h2 class="formTitle">Current User Details</h2>
+      
+     <div class="inputDiv">
+      <label class="inputLabel">Name:</label>
+      <label class="inputLabel">Position:</label>
+      <label class="inputLabel">Mobile no:</label>
+	<label class="inputLabel">Email:</label>
+	<label class="inputLabel">Gender:</label>
+	<label class="inputLabel">Date of Birth:</label>
+    </div>
+    <div>
+		<button type="submit" onclick="window.location.href='password_change.html';" id="submitButton" class="submitButton"> Change Password   </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
